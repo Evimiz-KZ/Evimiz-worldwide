@@ -1,0 +1,13 @@
+# Claude
+.claude/
+
+# Broken files
+assets/images/intercom.jpg
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
