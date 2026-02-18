@@ -1,11 +1,12 @@
 /* ============================================
-   EVIMIZ INTERNATIONAL — v2 PREMIUM JS
+   EVIMIZ INTERNATIONAL — var4
+   Exact copy of evimiz.kz, English version
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
   initStickyNav();
   initMobileNav();
-  initScrollAnimations();
+  initMobileDropdowns();
   initSmoothScroll();
 });
 
@@ -41,29 +42,47 @@ function initMobileNav() {
     document.body.classList.remove('nav-open');
     overlay.style.opacity = '0';
     overlay.style.visibility = 'hidden';
+    // Close all dropdowns too
+    document.querySelectorAll('.nav__dropdown.active').forEach(d => d.classList.remove('active'));
   }
 
   hamburger.addEventListener('click', toggle);
   overlay.addEventListener('click', close);
-  menu.querySelectorAll('.nav__link').forEach(link => link.addEventListener('click', close));
+  // Close menu when clicking a non-dropdown nav link
+  menu.querySelectorAll('.nav__link:not(.nav__link--has-dropdown)').forEach(link => {
+    link.addEventListener('click', close);
+  });
+  // Close menu when clicking a dropdown sub-link
+  menu.querySelectorAll('.nav__dropdown-link').forEach(link => {
+    link.addEventListener('click', close);
+  });
 }
 
-/* ---------- Scroll Animations ---------- */
-function initScrollAnimations() {
-  const elements = document.querySelectorAll('.animate');
-  if (!elements.length) return;
+/* ---------- Mobile Dropdowns ---------- */
+function initMobileDropdowns() {
+  const dropdowns = document.querySelectorAll('.nav__dropdown');
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const delay = parseInt(entry.target.dataset.delay || 0);
-        setTimeout(() => entry.target.classList.add('animate--visible'), delay);
-        observer.unobserve(entry.target);
-      }
+  dropdowns.forEach(dropdown => {
+    const trigger = dropdown.querySelector('.nav__link--has-dropdown');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', function(e) {
+      // Only handle as dropdown toggle on mobile (when hamburger is visible)
+      const hamburger = document.getElementById('navHamburger');
+      if (window.getComputedStyle(hamburger).display === 'none') return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close other dropdowns
+      dropdowns.forEach(other => {
+        if (other !== dropdown) other.classList.remove('active');
+      });
+
+      // Toggle this dropdown
+      dropdown.classList.toggle('active');
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-  elements.forEach(el => observer.observe(el));
+  });
 }
 
 /* ---------- Smooth Scroll ---------- */
