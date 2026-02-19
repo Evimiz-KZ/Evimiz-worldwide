@@ -1,28 +1,35 @@
 /* ============================================
-   EVIMIZ INTERNATIONAL — var4
-   Exact copy of evimiz.kz, English version
+   EVIMIZ INTERNATIONAL — var5 "Editorial Tech"
+   Navigation + Scroll Animations
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
   initStickyNav();
   initMobileNav();
-  initMobileDropdowns();
+  initScrollAnimations();
   initSmoothScroll();
 });
 
-/* ---------- Sticky Navigation ---------- */
+/* ---------- Sticky / Transparent → White Navigation ---------- */
 function initStickyNav() {
   const nav = document.getElementById('nav');
+  if (!nav) return;
+
   window.addEventListener('scroll', () => {
     nav.classList.toggle('nav--scrolled', window.scrollY > 50);
   }, { passive: true });
+
+  // Set initial state
+  nav.classList.toggle('nav--scrolled', window.scrollY > 50);
 }
 
 /* ---------- Mobile Navigation ---------- */
 function initMobileNav() {
   const hamburger = document.getElementById('navHamburger');
   const menu = document.getElementById('navMenu');
+  if (!hamburger || !menu) return;
 
+  // Create overlay
   const overlay = document.createElement('div');
   overlay.className = 'nav__overlay';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;opacity:0;visibility:hidden;transition:all 0.4s ease';
@@ -42,47 +49,49 @@ function initMobileNav() {
     document.body.classList.remove('nav-open');
     overlay.style.opacity = '0';
     overlay.style.visibility = 'hidden';
-    // Close all dropdowns too
-    document.querySelectorAll('.nav__dropdown.active').forEach(d => d.classList.remove('active'));
   }
 
   hamburger.addEventListener('click', toggle);
   overlay.addEventListener('click', close);
-  // Close menu when clicking a non-dropdown nav link
-  menu.querySelectorAll('.nav__link:not(.nav__link--has-dropdown)').forEach(link => {
-    link.addEventListener('click', close);
-  });
-  // Close menu when clicking a dropdown sub-link
-  menu.querySelectorAll('.nav__dropdown-link').forEach(link => {
+
+  // Close menu when clicking nav links
+  menu.querySelectorAll('.nav__link').forEach(link => {
     link.addEventListener('click', close);
   });
 }
 
-/* ---------- Mobile Dropdowns ---------- */
-function initMobileDropdowns() {
-  const dropdowns = document.querySelectorAll('.nav__dropdown');
+/* ---------- Scroll Animations (IntersectionObserver) ---------- */
+function initScrollAnimations() {
+  const animEls = document.querySelectorAll('.anim');
+  if (!animEls.length) return;
 
-  dropdowns.forEach(dropdown => {
-    const trigger = dropdown.querySelector('.nav__link--has-dropdown');
-    if (!trigger) return;
+  // If IntersectionObserver not supported, show all immediately
+  if (!('IntersectionObserver' in window)) {
+    animEls.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
 
-    trigger.addEventListener('click', function(e) {
-      // Only handle as dropdown toggle on mobile (when hamburger is visible)
-      const hamburger = document.getElementById('navHamburger');
-      if (window.getComputedStyle(hamburger).display === 'none') return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const delay = parseInt(el.dataset.delay, 10) || 0;
 
-      e.preventDefault();
-      e.stopPropagation();
+        if (delay > 0) {
+          setTimeout(() => el.classList.add('is-visible'), delay);
+        } else {
+          el.classList.add('is-visible');
+        }
 
-      // Close other dropdowns
-      dropdowns.forEach(other => {
-        if (other !== dropdown) other.classList.remove('active');
-      });
-
-      // Toggle this dropdown
-      dropdown.classList.toggle('active');
+        observer.unobserve(el);
+      }
     });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -40px 0px'
   });
+
+  animEls.forEach(el => observer.observe(el));
 }
 
 /* ---------- Smooth Scroll ---------- */
@@ -94,7 +103,8 @@ function initSmoothScroll() {
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
-      const offset = document.getElementById('nav').offsetHeight;
+      const nav = document.getElementById('nav');
+      const offset = nav ? nav.offsetHeight : 0;
       window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
     });
   });
