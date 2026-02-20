@@ -401,6 +401,14 @@ ul, ol { list-style: none; }
   margin-bottom: 20px;
 }
 
+.fork__brand-logo {
+  height: 48px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  margin-bottom: 20px;
+  display: block;
+}
+
 .fork__title {
   color: var(--white);
   font-size: clamp(32px, 4vw, 42px);
@@ -480,8 +488,9 @@ ul, ol { list-style: none; }
 .spotlight__content { max-width: 480px; }
 
 .spotlight__brand-img {
-  height: clamp(36px, 4.5vw, 56px);
+  height: 55px;
   display: block;
+  margin-bottom: -44px;
 }
 
 .spotlight__title {
