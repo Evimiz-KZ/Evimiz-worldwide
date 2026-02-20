@@ -555,7 +555,7 @@ ul, ol { list-style: none; }
    ============================================ */
 .cameras {
   padding: 120px 0;
-  background: var(--dark);
+  background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../assets/images/DSC00856.png') calc(50% - 175px) center / cover no-repeat;
 }
 
 .cameras__header {
@@ -713,7 +713,12 @@ ul, ol { list-style: none; }
    ============================================ */
 .platform {
   padding: 120px 0;
-  background: var(--white);
+  background:
+    radial-gradient(ellipse 600px 300px at 10% 20%, rgba(213, 52, 39, 0.15), transparent),
+    radial-gradient(ellipse 500px 400px at 90% 80%, rgba(255, 138, 0, 0.15), transparent),
+    radial-gradient(ellipse 400px 200px at 50% 50%, rgba(213, 52, 39, 0.08), transparent),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 15a8 8 0 00-8 8c0 1.5.4 2.9 1.1 4.1A6 6 0 0018 32a6 6 0 006 6h12a6 6 0 006-6 6 6 0 00-5.1-5.9c.7-1.2 1.1-2.6 1.1-4.1a8 8 0 00-8-8z' fill='none' stroke='rgba(213,52,39,0.15)' stroke-width='1.2'/%3E%3Ccircle cx='10' cy='50' r='2' fill='none' stroke='rgba(255,138,0,0.12)' stroke-width='0.8'/%3E%3Ccircle cx='50' cy='10' r='1.5' fill='none' stroke='rgba(213,52,39,0.12)' stroke-width='0.8'/%3E%3Cpath d='M5 5h4v4H5zM51 47h4v4h-4z' fill='none' stroke='rgba(0,0,0,0.07)' stroke-width='0.8' rx='1'/%3E%3C/svg%3E") repeat,
+    var(--white);
 }
 
 .platform__header {
@@ -745,14 +750,20 @@ ul, ol { list-style: none; }
 
 .plat-card {
   padding: 36px 28px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   transition: all var(--transition);
 }
 
 .plat-card:hover {
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
 }
 
 .plat-card__num {
