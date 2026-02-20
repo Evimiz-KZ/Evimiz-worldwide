@@ -354,6 +354,12 @@ ul, ol { list-style: none; }
   z-index: 2;
 }
 
+/* Intercom — text aligned right (mirror of cameras) */
+.fork__col--intercom {
+  align-items: flex-end;
+  text-align: right;
+}
+
 /* Intercom background */
 .fork__col--intercom::before {
   background-image: url('../assets/images/intercom-hero.png');
@@ -472,6 +478,11 @@ ul, ol { list-style: none; }
 }
 
 .spotlight__content { max-width: 480px; }
+
+.spotlight__brand-img {
+  height: clamp(36px, 4.5vw, 56px);
+  display: block;
+}
 
 .spotlight__title {
   font-size: clamp(36px, 4.5vw, 56px);
@@ -1105,6 +1116,20 @@ ul, ol { list-style: none; }
   .fork__col + .fork__col {
     border-left: none;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Intercom: show the device on the left, text on the right */
+  .fork__col--intercom::before {
+    background-position: left center;
+  }
+  .fork__col--intercom {
+    align-items: flex-end;
+  }
+  .fork__col--intercom .fork__content {
+    text-align: right;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
   }
 
   .fork__title { font-size: 30px; }
