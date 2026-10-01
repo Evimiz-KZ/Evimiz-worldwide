@@ -19,7 +19,9 @@
   --nav-h: 72px;
   --radius: 20px;
   --radius-sm: 12px;
-  --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --transition: 200ms ease;
 }
 
 /* ---------- Reset ---------- */
@@ -83,7 +85,7 @@ ul, ol { list-style: none; }
   border-radius: 100px;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition), transform 160ms var(--ease-out);
   white-space: nowrap;
 }
 
@@ -276,7 +278,7 @@ ul, ol { list-style: none; }
   width: 24px;
   height: 2px;
   border-radius: 2px;
-  transition: all 0.35s ease;
+  transition: transform 200ms var(--ease-out), opacity 200ms ease;
 }
 
 .nav:not(.nav--scrolled) .nav__hamburger span {
@@ -306,6 +308,7 @@ ul, ol { list-style: none; }
   display: flex;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .fork__col {
@@ -362,7 +365,7 @@ ul, ol { list-style: none; }
 
 /* Intercom background */
 .fork__col--intercom::before {
-  background-image: url('../assets/images/intercom-hero.png');
+  background-image: url('../assets/images/intercom-hero.jpg');
   background-position: center 40%;
 }
 
@@ -470,18 +473,20 @@ ul, ol { list-style: none; }
 }
 
 .spotlight__image-frame {
+  --frame-pad: 48px;
+  position: relative;
   background: var(--gray-bg);
   border-radius: var(--radius);
-  padding: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   aspect-ratio: 4 / 5;
   overflow: hidden;
 }
 
+/* Pinned inside the padded box: the whole device is always visible, whatever its intrinsic size */
 .spotlight__image-frame img {
-  max-height: 100%;
+  position: absolute;
+  inset: var(--frame-pad);
+  width: calc(100% - 2 * var(--frame-pad));
+  height: calc(100% - 2 * var(--frame-pad));
   object-fit: contain;
 }
 
@@ -555,7 +560,7 @@ ul, ol { list-style: none; }
    ============================================ */
 .cameras {
   padding: 120px 0;
-  background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../assets/images/DSC00856.png') calc(50% - 175px) center / cover no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../assets/images/DSC00856.jpg') calc(50% - 175px) center / cover no-repeat;
 }
 
 .cameras__header {
@@ -608,7 +613,7 @@ ul, ol { list-style: none; }
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius);
   padding: 28px;
-  transition: all var(--transition);
+  transition: transform var(--transition), border-color var(--transition), background-color var(--transition), box-shadow var(--transition);
 }
 
 .cam-card:hover {
@@ -618,9 +623,9 @@ ul, ol { list-style: none; }
 }
 
 .cam-card__img {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--white);
   border-radius: var(--radius-sm);
-  padding: 24px;
+  padding: 16px;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -632,7 +637,10 @@ ul, ol { list-style: none; }
 .cam-card__img img {
   max-height: 100%;
   object-fit: contain;
+  transition: transform 600ms var(--ease-out);
 }
+
+.cam-card:hover .cam-card__img img { transform: scale(1.04); }
 
 .cam-card__name {
   font-size: 17px;
@@ -676,11 +684,11 @@ ul, ol { list-style: none; }
   background: var(--white);
   border-radius: var(--radius);
   padding: 40px 32px;
-  transition: all var(--transition);
+  transition: transform var(--transition), border-color var(--transition), background-color var(--transition), box-shadow var(--transition);
 }
 
 .feat-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
 }
 
@@ -756,7 +764,7 @@ ul, ol { list-style: none; }
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  transition: all var(--transition);
+  transition: transform var(--transition), border-color var(--transition), background-color var(--transition), box-shadow var(--transition);
 }
 
 .plat-card:hover {
@@ -845,7 +853,7 @@ ul, ol { list-style: none; }
   padding: 40px 32px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius);
-  transition: all var(--transition);
+  transition: transform var(--transition), border-color var(--transition), background-color var(--transition), box-shadow var(--transition);
 }
 
 .part-card:hover {
@@ -874,6 +882,57 @@ ul, ol { list-style: none; }
   font-size: 15px;
   color: var(--gray-400);
   line-height: 1.7;
+}
+
+/* ============================================
+   PARTNERS
+   ============================================ */
+.partners {
+  padding: 64px 0;
+  background: var(--gray-bg);
+}
+
+.partners__logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 32px 64px;
+}
+
+/* Fixed box + contain: wide and square logos read at the same visual weight */
+.partners__logo img {
+  width: 168px;
+  height: 56px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition: filter 300ms ease, opacity 300ms ease;
+}
+
+.partners__logo:hover img { filter: none; opacity: 1; }
+
+/* Marquee (enabled by JS; without it the logos stay a static centered row) */
+.partners__marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.partners__logos.is-marquee {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 0;
+  width: max-content;
+  animation: partners-scroll var(--marquee-duration, 40s) linear infinite;
+  will-change: transform; /* own layer: color fade on hover doesn't repaint the track */
+}
+
+/* margin instead of gap so the two halves are exactly equal and -50% loops seamlessly */
+.is-marquee .partners__logo { margin-right: 64px; }
+
+@keyframes partners-scroll {
+  to { transform: translateX(-50%); }
 }
 
 /* ============================================
@@ -980,11 +1039,11 @@ ul, ol { list-style: none; }
   justify-content: center;
   z-index: 900;
   box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
-  transition: all var(--transition);
+  transition: transform 200ms var(--ease-out), box-shadow var(--transition);
 }
 
 .wa-widget:hover {
-  transform: scale(1.1);
+  transform: scale(1.06);
   box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
 }
 
@@ -993,29 +1052,43 @@ ul, ol { list-style: none; }
    ============================================ */
 .anim {
   opacity: 0;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  will-change: opacity, transform;
+  transition:
+    opacity 600ms var(--ease-out),
+    translate 600ms var(--ease-out),
+    scale 600ms var(--ease-out),
+    transform var(--transition),
+    border-color var(--transition),
+    background-color var(--transition),
+    box-shadow var(--transition);
 }
 
-.anim--fade-up {
-  transform: translateY(40px);
-}
-
-.anim--fade-left {
-  transform: translateX(40px);
-}
-
-.anim--fade-right {
-  transform: translateX(-40px);
-}
-
-.anim--scale {
-  transform: scale(0.92);
-}
+.anim--fade-up { translate: 0 16px; }
+.anim--fade-left { translate: 24px 0; }
+.anim--fade-right { translate: -24px 0; }
+.anim--scale { scale: 0.96; }
 
 .anim.is-visible {
   opacity: 1;
-  transform: translate(0, 0) scale(1);
+  translate: 0 0;
+  scale: 1;
+}
+
+/* Press feedback */
+.btn:active,
+.fork__btn:active { transform: scale(0.97); }
+
+/* Touch screens fire sticky hovers on tap: no hover motion there */
+@media (hover: none) {
+  .btn:hover, .fork__btn:hover, .cam-card:hover, .feat-card:hover,
+  .plat-card:hover, .wa-widget:hover, .cam-card:hover .cam-card__img img { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim { translate: none !important; scale: none !important; transition-duration: 200ms; }
+  .fork__col:hover::before, .cam-card:hover, .feat-card:hover, .plat-card:hover,
+  .cam-card:hover .cam-card__img img { transform: none; }
+  .fork__col--cameras:hover::before { transform: scaleX(-1); }
 }
 
 /* ============================================
@@ -1145,7 +1218,6 @@ ul, ol { list-style: none; }
     padding-top: calc(var(--nav-h) + 30px);
   }
 
-  .fork__col:hover { flex: 1; }
 
   .fork__col + .fork__col {
     border-left: none;
@@ -1153,6 +1225,8 @@ ul, ol { list-style: none; }
   }
 
   /* Intercom: show the device on the left, text on the right */
+  .fork__col:hover { flex: 1; }
+
   .fork__col--intercom::before {
     background-position: left center;
   }
@@ -1226,6 +1300,10 @@ ul, ol { list-style: none; }
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
 
+  .partners__logos { gap: 24px 32px; }
+  .is-marquee .partners__logo { margin-right: 32px; }
+  .partners__logo img { width: 132px; height: 44px; }
+
   .fork__col {
     min-height: 350px;
     padding: 32px 20px;
@@ -1237,7 +1315,7 @@ ul, ol { list-style: none; }
 
   .spotlight { padding: 64px 0; }
   .spotlight__image-frame {
-    padding: 32px;
+    --frame-pad: 32px;
     max-width: 100%;
   }
   .spotlight__buttons {
